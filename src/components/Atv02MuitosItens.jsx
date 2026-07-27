@@ -25,10 +25,8 @@
   */
 import React, { useState } from "react";
 import { View, Pressable, Text } from "react-native";
-
 export default function Atv02MuitosItens() {
   const [todos, setTodos] = useState([]);
-
   const carregarAtividades = async () => {
     try {
       const resposta = await fetch(
@@ -40,13 +38,11 @@ export default function Atv02MuitosItens() {
       console.log(erro);
     }
   };
-
   return (
     <View>
       <Pressable onPress={carregarAtividades}>
         <Text>Clique abaixo para carregar várias atividades</Text>
       </Pressable>
-
       <View>
         {todos.map((item) => (
           <Text key={item.id}>
