@@ -29,10 +29,8 @@ import { View, Pressable, Text } from "react-native";
 export default function Atv01UmItem() {
   const [atividade, setAtividade] = useState();
 
-  async function name(params) {
-    
-  } carregarAtividade = () => {
-    fetch("https://jsonplaceholder.typicode.com/todos/1"
+ } await fetch 
+    ("https://jsonplaceholder.typicode.com/todos/1"
     ,{ method: 'GET', }
     )
         .then((resposta) => {
@@ -43,7 +41,6 @@ export default function Atv01UmItem() {
       console.log(resultado)
       .catch((error) => {
         console.error("Erro ao carregar atividade:", error);
-
               const usuario = <View style={estilo.dados}>
                 <Text>Nome: {resultado.name}</Text>
                 <Text>Email: {resultado.email}</Text>
