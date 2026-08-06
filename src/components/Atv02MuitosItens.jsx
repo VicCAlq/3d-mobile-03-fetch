@@ -75,8 +75,18 @@ export default function Atv02MuitosItens() {
       // chamado "map", que funciona como um loop de "for item in lista"
       const listaDeUsuarios = <View>
         {resultado.map((conteudo) => {
+          let feito = "";
+          if (conteudo.completed === true)
+          {
+            feito = "feito"
+          }
+          else
+          {
+            feito = "a fazer"
+          }
+
           return <View style={estilo.dados}>
-            <Text>{conteudo.id} - {conteudo.title}:  </Text>
+            <Text>{conteudo.id} - {conteudo.title}: {feito} </Text>
            
           </View>
         })}
@@ -86,7 +96,9 @@ export default function Atv02MuitosItens() {
       // a variável de estado "lista"
       setResultado(listaDeUsuarios)
     })
-  
+    
+
+  }
   // Parte visual do componente
   return(
     <View style={estilo.usuario}>
