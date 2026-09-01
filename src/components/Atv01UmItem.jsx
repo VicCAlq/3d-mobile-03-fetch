@@ -23,19 +23,21 @@
   * ou "a fazer" se completed for false
   */
 // Elementos necessários para o componente
+
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import { useState } from 'react'
+
 
 // Estilos de "CSS"
 const estilo = StyleSheet.create({
   usuario: {
-    backgroundColor: "#dac",
+    backgroundColor: "#8ac",
     padding: "10px",
     borderRadius: "10px",
     margin: "20px",
   },
   dados: {
-    backgroundColor: "#b78",
+    backgroundColor: "#68a",
     padding: "5px",
     borderRadius: "5px",
     margin: "10px",
@@ -52,71 +54,102 @@ const estilo = StyleSheet.create({
   },
 })
 
-export default function Atv01UmItem() {
+
+export default function Atv02MuitosItens() {
+
 
   // Variável que vai armazenar a lista recebida
-  const [resultado, setResultado] = useState(<Text></Text>)
+  const [resultado, setResultado] = useState(
+    <Text>As atividades aparecerão aqui no lugar deste texto</Text>
+  )
 
-  // Função que vai carregar os dados do endereço listado.
-  // Como ela depende de um resultado que não depende apenas do
-  // próprio programa, ela se trada de uma função "assíncrona"
-  async function carregarAtividade() {
-    // 1ª etapa: Enviar a requisição
+
+  // Função que vai carregar a lista do endereço listado.
+  async function carregarUsuario() {
+
+    // 1ª etapa: Enviar requisição
     // "fetch" é a função que envia uma mensagem para um endereço.
-    // O resultado de "fetch" é assíncrono: ele entrega uma "Promessa"
-    // de resultado, que quando concluída tem seu resultado processado.
     await fetch(
       // Este é o endereço a ser acessado
-      'https://jsonplaceholder.typicode.com/todos/1',
+      'https://jsonplaceholder.typicode.com/todos',
+
       // Aqui definimos o método da requisição
       { method: 'GET', }
     )
-    // 2ª etapa: Tratar a resposta
-    // O ".then" abaixo define código a ser executado quando o "fetch"
-    // traz seu resultado. Ele traz o resultado em um formato que precisa
-    // ser convertido para código JavaScript
+
+    // 2ª etapa: Receber e tratar a resposta
     .then((resposta) => {
-      // convertemos o resultado para JavaScript
-      return resposta.json()
-    })
-    // 3ª etapa: Usar a resposta
-    // O próximo ".then" é onde definimos o que fazer com o resultado
-    // já processado do "fetch". Estamos aqui chamando o resultado de "resultado"
-    .then((resultado) => {
-      // Aqui enviamos para o console do navegador. No site, aperte F12
-      // e na janela que aparecer mude para a aba do "console"
-      // para ver este resultado
-      console.log(resultado)
-      let feitoOuNao = ""
-      if (resultado.completed === true) {
-        feitoOuNao = "feito"
-      }
-        else () {
-        feitoOuNao = "a fazer"
+
+      // Se a resposta não tiver um valor "ok", anunciamos um erro
+      if (!resposta.ok) {
+        throw new Error(Erro na requisição! Status: ${resposta.status});
       }
 
-      // O código abaixo vai organizar as informações recebidas em
-      // elementos do React Native:
-      const usuario = <View style={estilo.dados}>
-        <Text>{resultado.id} - {resultado.title}: {feitoOuNao}</Text>
-      </View>
+      // Se não der erro, convertemos o resultado para JavaScript
+      return resposta.json()
+    })
+
+    // 3ª etapa: Usar o resultado
+    .then((resultado) => {
+
+      console.log(resultado)
+
+      let usuario = (
+        <View style={estilo.dados}>
+
+          {resultado.map((item) => {
+
+            let feito = ""
+
+            if (item.completed === true) {
+              feito = "feito"
+            }
+            else {
+              feito = "a fazer"
+            }
+
+            return (
+              <Text key={item.id}>
+                {item.id} - {item.title}: {feito}
+              </Text>
+            )
+          })}
+
+        </View>
+      )
 
       // Jogamos o valor da lista de itens a serem exibidos para
       // a variável de estado "resultado"
       setResultado(usuario)
     })
+
+    // Se houverem erros mais severos, estes são tratados na função de
+    // "catch" abaixo:
+    .catch(error => {
+      console.log("Erro: ", error)
+    })
   }
+
 
   // Parte visual do componente
   return(
     <View style={estilo.usuario}>
+
       <Text>
-        Clique abaixo para carregar uma atividade:
+        Clique abaixo para carregar várias atividades
       </Text>
-      <Pressable style={estilo.botao} onPress={() => carregarAtividade()}>
-        <Text style={estilo.textoBotao}>Carregar atividade</Text>
+
+      <Pressable
+        style={estilo.botao}
+        onPress={() => carregarUsuario()}
+      >
+        <Text style={estilo.textoBotao}>
+          Carregar atividades
+        </Text>
       </Pressable>
+
       {resultado}
+
     </View>
   )
 }
