@@ -22,3 +22,66 @@
   * O valor de "status" deve ser "feito" se completed for true, 
   * ou "a fazer" se completed for false
   */
+
+import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { useState } from 'react'
+
+const estilo = StyleSheet.create({
+  dados: {cd
+    backgroundColor: "#b78",
+    padding: "5px",
+    borderRadius: "5px",
+    margin: "10px",
+  },
+
+  texBotao: {
+    color: "#eee",
+    fontSize: "16px",
+  },
+
+  botao: {
+    borderRadius: "5px",
+    backgroundColor: "#505560",
+    padding: "10px",
+    margin: "10px",
+  },
+})
+
+export default function Atv01UmItem() {
+    const [resultado, setResultado] = useState(<Text>O usuário aparecerá aqui no lugar deste texto</Text>)
+  async function carregarAtividade() {
+    await fetch(
+      'https://jsonplaceholder.typicode.com/todos/1',
+      { method: 'GET', }
+    )
+    .then((resposta) => {
+      return resposta.json()
+    })
+    .then((resultado) => {
+            console.log(resultado)
+
+      const atividade = (<View style={estilo.dados}>
+        <Text>{resultado.id} - {resultado.title}: {resultado.completed ? 'feito' : 'a fazer'}
+          </Text>
+        </View>
+      )
+
+      setResultado(atividade) 
+    })
+  }
+
+  return(
+    <View>
+
+    <Pressable
+        style={estilo.botao}
+        onPress={() => carregarAtividade()}>
+        <Text style={estilo.texBotao}>
+        Carregue a atividade abaixo:
+      </Text>
+
+      </Pressable>
+      {resultado}
+    </View>
+  )
+}
